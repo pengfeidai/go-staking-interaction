@@ -1,0 +1,92 @@
+app:
+  environment: local
+  debug: true
+  version: "0.0.1"
+  host: 127.0.0.1
+  port: 8085
+  log_level: "info"
+  timeout: 60s
+
+database:
+  driver: mysql
+  host: 127.0.0.1
+  port: 3306
+  username: root
+  password: "00000000"
+  database: "web3-contract"
+  charset: utf8
+  timezone: Local
+  max_open_conns: 20
+  max_idle_conns: 10
+  conn_max_lifetime: 1h
+  conn_max_idle_time: 30m
+  log_level: info
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  password: ""
+  database: 0
+  pool_size: 10
+  min_idle_conns: 5
+  dial_timeout: 5s
+  read_timeout: 3s
+  write_timeout: 3s
+  idle_timeout: 5m
+  locks:
+    default_expiration: 10s
+    default_timeout: 10s
+    expirations:
+      lock: 10s
+      withdraw_lock: 10s
+      transaction_lock: 10s
+      asset_lock: 10s
+    timeouts:
+      lock: 10s
+      withdraw_lock: 10s
+      transaction_lock: 10s
+      asset_lock: 10s
+
+blockchain:
+  network: testnet
+  rpc_url: "https://bsc-testnet-rpc.publicnode.com"
+  raw_url: "https://data-seed-prebsc-1-s1.binance.org:8545"
+  private_key: "${BLOCKCHAIN_PRIVATE_KEY}"
+  contracts:
+    stake_address: "${STAKE_CONTRACT_ADDRESS}"
+    airdrop_address: "${AIRDROP_CONTRACT_ADDRESS}"
+    token_address: "${TOKEN_CONTRACT_ADDRESS}"
+  sync:
+    batch_size: 100
+    block_buffer: 30
+    workers: 5
+    sync_interval: 30s
+    retry_attempts: 3
+    retry_delay: 5s
+  transaction:
+    gas_limit: 21000
+    gas_price: "5000000000"
+    confirm_blocks: 3
+    timeout: 30s
+    retry_attempts: 3
+    retry_delay: 5s
+  owners:
+      - "${OWNER1}"
+      - "${OWNER2}"
+      - "${OWNER3}"
+      - "${OWNER4}"
+      - "${OWNER5}"
+
+auth:
+  jwt_secret: "${JWT_SECRET}"
+  ecdsa_private_key: "${JWT_SECRET}"
+  ed25519_seed: "${ED25519_SEED}"
+  jwt_expiration: 30m
+  prefix: "Bearer "
+  max_delta: 3000000
+
+log:
+  is_json_format: true
+  log_path: "data/logs"
+  log_file: "server.logger"
+  maxAge: 7

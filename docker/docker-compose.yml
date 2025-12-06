@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: staking_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    # 🔧 选择一种方式配置密码
+
+    # 方式1：无密码（开发环境）
+    command: redis-server
+
+    # 方式2：有密码（生产环境）
+    # command: redis-server --requirepass "your_secure_password"
+
+    # 方式3：使用配置文件
+    # volumes:
+    #   - ./redis.conf:/usr/local/etc/redis/redis.conf
+    # command: redis-server /usr/local/etc/redis/redis.conf
+
+    volumes:
+      - redis_data:/data
+    networks:
+      - app_network
+
+  # 可选：Redis Commander (Redis 管理界面)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis_commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - app_network
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  app_network:
+    driver: bridge
